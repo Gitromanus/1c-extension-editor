@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CodeHighlight } from "@/components/code-highlight";
+import { CodeEditor } from "@/components/code-editor";
 import { isOneCFile } from "@/lib/extension/onedc-syntax";
 import { readEntryText, type UnpackedArchive } from "@/lib/extension/extract";
 import {
@@ -248,15 +249,12 @@ export function ExtensionViewer({
             ) : binary ? (
               <EmptyState text="Бинарный или нетекстовый файл. Просмотр и редактирование кода недоступны." />
             ) : editing ? (
-              <textarea
+              <CodeEditor
                 value={draft}
-                onChange={(e) => setDraft(e.target.value)}
+                onChange={setDraft}
                 onKeyDown={handleKeyDown}
-                spellCheck={false}
-                autoComplete="off"
-                autoCorrect="off"
-                className="h-full min-h-0 w-full resize-none bg-background p-4 font-mono text-[13px] leading-relaxed whitespace-pre break-words text-foreground outline-none"
-                aria-label="Редактор кода"
+                highlight={selected ? isOneCFile(selected) : false}
+                label="Редактор кода"
               />
             ) : (
               <pre className="p-4 font-mono text-[13px] leading-relaxed whitespace-pre-wrap break-words">

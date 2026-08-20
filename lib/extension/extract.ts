@@ -206,6 +206,13 @@ function buildV8Archive(
     name: decoded.name || name,
     entries: decoded.entries,
     async readFile(path: string) {
+      // Читаем из «живого» содержимого контейнера, если модуль был отредактирован,
+      // иначе правки терялись бы при повторном открытии файла (decoded.files — снимок).
+      const edit = decoded.edits.get(path);
+      if (edit) {
+        const node = parsed.nodeByKey.get(edit.rawKey);
+        if (node) return node.content;
+      }
       return decoded.files.get(path) ?? null;
     },
     writeEntry,
