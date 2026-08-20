@@ -12,7 +12,12 @@ import {
   type UnpackedArchive,
 } from "@/lib/extension/extract";
 
-export function ExtensionDropzone() {
+export interface ExtensionDropzoneProps {
+  /** Уведомляет родителя о смене режима: true — открыт редактор, false — возврат. */
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function ExtensionDropzone({ onOpenChange }: ExtensionDropzoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [opened, setOpened] = useState<UnpackedArchive | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -29,6 +34,7 @@ export function ExtensionDropzone() {
       const archive = await extractCfe(file);
       toast.success("Расширение распаковано", { id: toastId });
       setOpened(archive);
+      onOpenChange?.(true);
     } catch (err) {
       const message =
         err instanceof CfeFormatError
@@ -45,6 +51,7 @@ export function ExtensionDropzone() {
     setOpened(null);
     setFileName(null);
     if (inputRef.current) inputRef.current.value = "";
+    onOpenChange?.(false);
   }
 
   if (opened) {
