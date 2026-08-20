@@ -196,9 +196,12 @@ function buildV8Archive(
         );
       }
       node.content = rewritten;
-      return;
+    } else {
+      node.content = textToBytes(content);
     }
-    node.content = textToBytes(content);
+    // Обновляем декодированный снимок, чтобы повторное открытие файла
+    // показывало внесённую правку (в том числе для модулей форм).
+    decoded.files.set(path, textToBytes(content));
   };
 
   return {
@@ -206,13 +209,9 @@ function buildV8Archive(
     name: decoded.name || name,
     entries: decoded.entries,
     async readFile(path: string) {
-      // Читаем из «живого» содержимого контейнера, если модуль был отредактирован,
-      // иначе правки терялись бы при повторном открытии файла (decoded.files — снимок).
-      const edit = decoded.edits.get(path);
-      if (edit) {
-        const node = parsed.nodeByKey.get(edit.rawKey);
-        if (node) return node.content;
-      }
+      // Читаем из декодированного снимка: для обычных модулей там текст,
+      // для модулей форм — расшифрованный текст, а не сырые байты контейнера.
+      // writeEntry обновляет этот снимок при сохранении.
       return decoded.files.get(path) ?? null;
     },
     writeEntry,

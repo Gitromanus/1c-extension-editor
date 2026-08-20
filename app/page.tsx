@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ShieldCheck, Cpu, Archive } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { ExtensionDropzone } from "@/components/extension-dropzone";
 
 const features = [
@@ -33,14 +34,15 @@ export default function HomePage() {
         className="absolute inset-0 pattern-grid opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
       />
 
-      {isOpen ? (
-        // Полноэкранный режим редактора: вся высота окна отдаётся вьюеру.
-        <div className="relative flex min-h-0 flex-1 flex-col px-4 py-4">
-          <ExtensionDropzone onOpenChange={setIsOpen} />
-        </div>
-      ) : (
-        // Стартовый экран: hero, загрузка файла и возможности.
-        <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-10 overflow-y-auto px-4 py-14">
+      {/* ExtensionDropzone всегда на одном месте в дереве, чтобы не терять
+          состояние открытого файла при переключении isOpen. */}
+      <div
+        className={cn(
+          "relative mx-auto flex w-full flex-1 flex-col",
+          isOpen ? "px-4 py-4" : "max-w-7xl gap-10 overflow-y-auto px-4 py-14"
+        )}
+      >
+        {!isOpen && (
           <div className="space-y-4 text-center">
             <div className="inline-flex items-center gap-2 rounded-md border bg-background px-3 py-1 font-mono text-xs text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -55,9 +57,11 @@ export default function HomePage() {
               <span className="font-mono">.cfe</span>.
             </p>
           </div>
+        )}
 
-          <ExtensionDropzone onOpenChange={setIsOpen} />
+        <ExtensionDropzone onOpenChange={setIsOpen} />
 
+        {!isOpen && (
           <div className="mx-auto grid w-full max-w-5xl gap-3 sm:grid-cols-3">
             {features.map((f) => (
               <div
@@ -72,8 +76,8 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
