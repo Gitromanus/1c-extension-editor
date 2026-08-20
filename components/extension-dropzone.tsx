@@ -6,11 +6,17 @@ import { Upload, FileArchive, FolderOpen, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ExtensionViewer } from "@/components/extension-viewer";
+import { useEffect } from "react";
 import {
   extractCfe,
   CfeFormatError,
   type UnpackedArchive,
 } from "@/lib/extension/extract";
+import {
+  registerArchive,
+  clearArchive,
+  setLoadHandler,
+} from "@/lib/agent-api";
 
 export interface ExtensionDropzoneProps {
   /** Уведомляет родителя о смене режима: true — открыт редактор, false — возврат. */
@@ -18,6 +24,12 @@ export interface ExtensionDropzoneProps {
 }
 
 export function ExtensionDropzone({ onOpenChange }: ExtensionDropzoneProps) {
+  // Предоставляем глобальному API обработчик загрузки .cfe.
+  useEffect(() => {
+    setLoadHandler(handleFiles);
+    return () => setLoadHandler(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const inputRef = useRef<HTMLInputElement>(null);
   const [opened, setOpened] = useState<UnpackedArchive | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -34,6 +46,7 @@ export function ExtensionDropzone({ onOpenChange }: ExtensionDropzoneProps) {
       const archive = await extractCfe(file);
       toast.success("Расширение распаковано", { id: toastId });
       setOpened(archive);
+      registerArchive(archive, file.name);
       onOpenChange?.(true);
     } catch (err) {
       const message =
@@ -51,6 +64,7 @@ export function ExtensionDropzone({ onOpenChange }: ExtensionDropzoneProps) {
     setOpened(null);
     setFileName(null);
     if (inputRef.current) inputRef.current.value = "";
+    clearArchive();
     onOpenChange?.(false);
   }
 
@@ -93,6 +107,7 @@ export function ExtensionDropzone({ onOpenChange }: ExtensionDropzoneProps) {
         ref={inputRef}
         type="file"
         accept=".cfe"
+        data-testid="cfe-upload-input"
         className="sr-only"
         onChange={(e) => handleFiles(e.target.files?.[0])}
       />

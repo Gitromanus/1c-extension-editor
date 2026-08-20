@@ -10,6 +10,15 @@
 
 > Сайт опубликован как статический экспорт Next.js на обычном хостинге (без VPS).
 
+## Использование ИИ-агентами
+
+Сервис предоставляет глобальный JS-API `window.__oneCEditor__` для программной работы
+с расширением прямо в браузере (без бэкенда). Агент управляет страницей через
+Playwright/Puppeteer и вызывает методы загрузки, чтения, записи и сборки `.cfe`.
+
+Подробности, таблица методов и готовый скрипт — в [AGENT_USAGE.md](AGENT_USAGE.md)
+и [`examples/agent-playwright.mjs`](examples/agent-playwright.mjs).
+
 ## Стек
 
 - Next.js 16 (App Router), React 19, TypeScript

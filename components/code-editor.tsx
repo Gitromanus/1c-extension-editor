@@ -72,6 +72,7 @@ export function CodeEditor({
         onChange={(e) => onChange(e.target.value)}
         onScroll={syncScroll}
         onKeyDown={onKeyDown}
+        data-testid="code-editor"
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"

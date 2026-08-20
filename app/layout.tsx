@@ -3,6 +3,7 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { BridgeProvider } from "@/components/bridge-provider";
+import { AgentApi } from "@/components/agent-api";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <BridgeProvider />
+          <AgentApi />
           <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {children}
           </main>

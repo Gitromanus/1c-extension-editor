@@ -148,7 +148,12 @@ export function ExtensionViewer({
         </div>
         <div className="flex items-center gap-2">
           {downloadable && (
-            <Button onClick={downloadCfe} disabled={packing} size="sm">
+            <Button
+              onClick={downloadCfe}
+              disabled={packing}
+              size="sm"
+              data-testid="download-cfe"
+            >
               {packing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
@@ -310,6 +315,9 @@ function TreeNode({
     <button
       type="button"
       onClick={() => onOpen(node.path)}
+      data-testid="tree-file"
+      data-path={node.path}
+      data-bsl={isBsl ? "true" : "false"}
       className={cn(
         "flex w-full items-center gap-1.5 py-1 pr-3 text-left text-sm transition-colors hover:bg-muted/60",
         active && "bg-primary/10"
