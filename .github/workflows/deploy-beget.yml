@@ -1,0 +1,24 @@
+name: Deploy static site to Beget
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy out/ to Beget via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Путь к public_html относительно домашней папки FTP-пользователя
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # Загружаем содержимое собранной папки out/
+          local-dir: ./out/
