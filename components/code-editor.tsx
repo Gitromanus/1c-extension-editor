@@ -48,7 +48,7 @@ export function CodeEditor({
   }
 
   return (
-    <div className="relative h-full min-h-0 w-full overflow-hidden bg-background font-mono text-[13px] leading-relaxed">
+    <div className="relative flex-1 min-h-0 w-full overflow-hidden bg-background font-mono text-[13px] leading-relaxed">
       {/* Подсвеченный слой (только для отображения) */}
       <pre
         ref={preRef}

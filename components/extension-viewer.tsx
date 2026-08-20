@@ -148,7 +148,7 @@ export function ExtensionViewer({
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex w-full min-h-0 flex-1 flex-col">
       <div className="mb-4 flex shrink-0 flex-wrap items-center justify-between gap-3 rounded-lg border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border bg-muted/40">
@@ -238,7 +238,7 @@ export function ExtensionViewer({
               </div>
             )}
           </div>
-          <div className="min-h-0 flex-1 overflow-auto p-0">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-0">
             {!selected ? (
               <EmptyState text="Выберите файл, чтобы просмотреть его содержимое" />
             ) : loading ? (
@@ -257,13 +257,15 @@ export function ExtensionViewer({
                 label="Редактор кода"
               />
             ) : (
-              <pre className="p-4 font-mono text-[13px] leading-relaxed whitespace-pre-wrap break-words">
-                {selected && content !== null && isOneCFile(selected) ? (
-                  <CodeHighlight code={content} />
-                ) : (
-                  content
-                )}
-              </pre>
+              <div className="min-h-0 flex-1 overflow-auto">
+                <pre className="p-4 font-mono text-[13px] leading-relaxed whitespace-pre-wrap break-words">
+                  {selected && content !== null && isOneCFile(selected) ? (
+                    <CodeHighlight code={content} />
+                  ) : (
+                    content
+                  )}
+                </pre>
+              </div>
             )}
           </div>
         </div>
