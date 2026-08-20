@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ShieldCheck, Cpu, Archive } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ExtensionDropzone } from "@/components/extension-dropzone";
@@ -56,6 +57,14 @@ export default function HomePage() {
               просмотр структуры и редактирование модулей файла{" "}
               <span className="font-mono">.cfe</span>.
             </p>
+            <div className="flex justify-center pt-1">
+              <Link
+                href="/docs"
+                className="inline-flex items-center gap-1.5 rounded-md border bg-background px-3 py-1.5 font-mono text-xs text-primary transition-colors hover:border-primary/40"
+              >
+                Документация для ИИ-агентов →
+              </Link>
+            </div>
           </div>
         )}
 
