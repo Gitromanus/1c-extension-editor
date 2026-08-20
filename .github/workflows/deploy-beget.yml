@@ -18,6 +18,9 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          # Бигет требует шифрование: FTPS (explicit) на порту 21
+          protocol: ftps
+          port: 21
           # Путь к public_html относительно домашней папки FTP-пользователя
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           # Загружаем содержимое собранной папки out/
