@@ -12,12 +12,17 @@
 
 ## Использование ИИ-агентами
 
-Сервис предоставляет глобальный JS-API `window.__oneCEditor__` для программной работы
-с расширением прямо в браузере (без бэкенда). Агент управляет страницей через
-Playwright/Puppeteer и вызывает методы загрузки, чтения, записи и сборки `.cfe`.
+Есть два способа программной работы с расширением:
 
-Подробности, таблица методов и готовый скрипт — в [AGENT_USAGE.md](AGENT_USAGE.md)
-и [`examples/agent-playwright.mjs`](examples/agent-playwright.mjs).
+1. **Браузерный JS-API** `window.__oneCEditor__` — глобальный объект на страницах
+   сайта. Агент управляет страницей через Playwright/Puppeteer (без бэкенда).
+   Таблица методов и скрипт — в [AGENT_USAGE.md](AGENT_USAGE.md)
+   и [`examples/agent-playwright.mjs`](examples/agent-playwright.mjs).
+
+2. **Серверный HTTP API** на Cloudflare Worker (папка `worker-api/`) — запросы по
+   HTTP напрямую, без браузера и без локального Node. Поддерживает JSON и multipart
+   (`curl -F "file=@input.cfe"`), возвращает готовый `.cfe`. Документация —
+   в [`worker-api/README.md`](worker-api/README.md).
 
 ## Стек
 

@@ -36,3 +36,9 @@ next-env.d.ts
 # playwright cli
 .playwright-cli
 .playwright-mcp
+
+# cloudflare worker (worker-api)
+/worker-api/node_modules
+/worker-api/index.js
+/worker-api/.wrangler
+/worker-api/logs

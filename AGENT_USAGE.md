@@ -66,6 +66,47 @@ npm i -D playwright && npx playwright install chromium
 SITE_URL=http://s96346ix.beget.tech/ node examples/agent-playwright.mjs input.cfe output.cfe
 ```
 
+## Серверный API (Cloudflare Worker) — без браузера
+
+Если не нужно управлять страницей, используйте **серверное HTTP API** на
+Cloudflare Worker (`worker-api/`). Запросы идут напрямую, обработка — на edge,
+без локального Node и без браузера.
+
+Развёрнутый экземпляр: `https://tight-waterfall-6bb.netesn.workers.dev`
+
+### Основные эндпоинты
+
+| Метод | Формат | Назначение |
+| --- | --- | --- |
+| `POST /api/tree` | JSON | Список файлов |
+| `POST /api/read` | JSON | Прочитать текст модуля |
+| `POST /api/edit` | JSON | Изменить модуль (возвращает `file_base64`) |
+| `POST /api/edit-all` | JSON | Добавить комментарий во все `.bsl` |
+| `POST /api/tree-form` | multipart | Список файлов (файл напрямую) |
+| `POST /api/read-form` | multipart | Прочитать текст модуля |
+| `POST /api/edit-form` | multipart | Изменить модуль (возвращает готовый `.cfe` бинарником) |
+
+### Пример (multipart, curl, без локальной обработки)
+
+```bash
+# 1. Структура
+curl -s -X POST https://<worker>/api/tree-form \
+  -F "file=@input.cfe" -o tree.json
+
+# 2. Читаем модуль (путь модуля кладём в module_path.txt, UTF-8)
+curl -s -X POST https://<worker>/api/read-form \
+  -F "file=@input.cfe" -F "module_path=<module_path.txt" -o module.json
+
+# 3. Правка и получение результата
+curl -s -X POST https://<worker>/api/edit-form \
+  -F "file=@input.cfe" \
+  -F "module_path=<module_path.txt" \
+  -F "new_code=<new_code.txt" \
+  -o output.cfe
+```
+
+Подробная документация и JSON-эндпоинты — в [`worker-api/README.md`](worker-api/README.md).
+
 ## Примечания и ограничения
 
 - Обработка **локальная** — данные не уходят с машины, где открыт браузер.

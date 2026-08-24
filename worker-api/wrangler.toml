@@ -1,0 +1,12 @@
+# Cloudflare Worker конфигурация (wrangler v3+)
+name = "1c-extension-api"
+main = "index.ts"
+compatibility_date = "2024-11-01"
+
+# Отдаём максимум памяти/лимитов для обработки файлов .cfe
+[limits]
+# (необязательно; значения по умолчанию подходят)
+
+# Телеметрия в Cloudflare Dashboard (можно отключить)
+[observability]
+enabled = true

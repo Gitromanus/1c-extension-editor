@@ -1,0 +1,23 @@
+{
+  "name": "1c-extension-api-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker: серверное HTTP API для редактирования расширений 1C (.cfe)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "esbuild index.ts --bundle --format=esm --platform=browser --target=es2022 --outfile=index.js",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "pako": "^1.0.11"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.0",
+    "wrangler": "^3.90.0"
+  }
+}
