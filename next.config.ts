@@ -6,6 +6,11 @@ const basePath =
 const nextConfig: NextConfig = {
   output: process.env.OUTPUT_MODE === "export" ? "export" : undefined,
 
+  // Генерировать <страница>/index.html вместо <страница>.html, чтобы
+  // каталог каждой страницы (например /docs/) содержал index.html и
+  // Apache/nginx отдавал его без ошибки 403.
+  trailingSlash: true,
+
   ...(basePath && {
     basePath,
     assetPrefix: basePath,
