@@ -89,16 +89,18 @@ Cloudflare Worker (`worker-api/`). Запросы идут напрямую, о�
 ### Пример (multipart, curl, без локальной обработки)
 
 ```bash
+BASE=https://tight-waterfall-6bb.netesn.workers.dev
+
 # 1. Структура
-curl -s -X POST https://<worker>/api/tree-form \
+curl -s -X POST $BASE/api/tree-form \
   -F "file=@input.cfe" -o tree.json
 
 # 2. Читаем модуль (путь модуля кладём в module_path.txt, UTF-8)
-curl -s -X POST https://<worker>/api/read-form \
+curl -s -X POST $BASE/api/read-form \
   -F "file=@input.cfe" -F "module_path=<module_path.txt" -o module.json
 
 # 3. Правка и получение результата
-curl -s -X POST https://<worker>/api/edit-form \
+curl -s -X POST $BASE/api/edit-form \
   -F "file=@input.cfe" \
   -F "module_path=<module_path.txt" \
   -F "new_code=<new_code.txt" \

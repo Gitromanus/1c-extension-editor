@@ -7,7 +7,15 @@
 > Это **серверная альтернатива** браузерному API `window.__oneCEditor__` — запросы
 > идут по HTTP напрямую, без управления браузером.
 
-## Быстрый старт
+## Базовый URL
+
+Развёрнутый экземпляр: `https://tight-waterfall-6bb.netesn.workers.dev`
+
+```
+BASE=https://tight-waterfall-6bb.netesn.workers.dev
+```
+
+## Быстрый старт (свой экземпляр)
 
 ```bash
 npm install
@@ -15,8 +23,7 @@ npx wrangler login
 npx wrangler deploy
 ```
 
-После деплоя Worker доступен на вашем `.workers.dev`-адресе, например
-`https://1c-extension-api.<ваш-аккаунт>.workers.dev`.
+После деплоя Worker доступен на вашем `.workers.dev`-адресе.
 
 ### Сборка монолитного `index.js` (для вставки в Dashboard)
 
@@ -36,7 +43,7 @@ npm run build
 #### `POST /api/tree`
 
 ```bash
-curl -X POST https://<worker>/api/tree \
+curl -X POST $BASE/api/tree \
   -H "Content-Type: application/json" \
   -d '{"file_base64":"<b64>"}'
 ```
@@ -45,7 +52,7 @@ curl -X POST https://<worker>/api/tree \
 #### `POST /api/read`
 
 ```bash
-curl -X POST https://<worker>/api/read \
+curl -X POST $BASE/api/read \
   -H "Content-Type: application/json" \
   -d '{"file_base64":"<b64>","module_path":"CommonModules/X/Module.bsl"}'
 ```
@@ -54,7 +61,7 @@ curl -X POST https://<worker>/api/read \
 #### `POST /api/edit`
 
 ```bash
-curl -X POST https://<worker>/api/edit \
+curl -X POST $BASE/api/edit \
   -H "Content-Type: application/json" \
   -d '{"file_base64":"<b64>","module_path":"CommonModules/X/Module.bsl","new_code":"// новый код"}'
 ```
@@ -63,7 +70,7 @@ curl -X POST https://<worker>/api/edit \
 #### `POST /api/edit-all` (добавить префикс-комментарий во все `.bsl`)
 
 ```bash
-curl -X POST https://<worker>/api/edit-all \
+curl -X POST $BASE/api/edit-all \
   -H "Content-Type: application/json" \
   -d '{"file_base64":"<b64>","comment":"// AI: изменено\n"}'
 ```
@@ -77,7 +84,7 @@ curl -X POST https://<worker>/api/edit-all \
 #### `POST /api/tree-form`
 
 ```bash
-curl -X POST https://<worker>/api/tree-form \
+curl -X POST $BASE/api/tree-form \
   -F "file=@input.cfe" -o tree.json
 ```
 → `{ "success": true, "entries": [...] }`
@@ -86,7 +93,7 @@ curl -X POST https://<worker>/api/tree-form \
 
 ```bash
 # путь модуля лежит в module_path.txt (UTF-8)
-curl -X POST https://<worker>/api/read-form \
+curl -X POST $BASE/api/read-form \
   -F "file=@input.cfe" -F "module_path=<module_path.txt" -o module.json
 ```
 → `{ "success": true, "path", "text" }`
@@ -94,7 +101,7 @@ curl -X POST https://<worker>/api/read-form \
 #### `POST /api/edit-form` — возвращает готовый `.cfe` бинарником
 
 ```bash
-curl -X POST https://<worker>/api/edit-form \
+curl -X POST $BASE/api/edit-form \
   -F "file=@input.cfe" \
   -F "module_path=<module_path.txt" \
   -F "new_code=<new_code.txt" \
@@ -119,15 +126,17 @@ curl -X POST https://<worker>/api/edit-form \
 ## Полный цикл (multipart, без Node/PowerShell)
 
 ```bash
+BASE=https://tight-waterfall-6bb.netesn.workers.dev
+
 # 1. Структура
-curl -s -X POST https://<worker>/api/tree-form -F "file=@input.cfe" -o tree.json
+curl -s -X POST $BASE/api/tree-form -F "file=@input.cfe" -o tree.json
 
 # 2. Чтение модуля (путь из tree.json)
-curl -s -X POST https://<worker>/api/read-form \
+curl -s -X POST $BASE/api/read-form \
   -F "file=@input.cfe" -F "module_path=<module_path.txt" -o module.json
 
 # 3. Правка и получение результата
-curl -s -X POST https://<worker>/api/edit-form \
+curl -s -X POST $BASE/api/edit-form \
   -F "file=@input.cfe" \
   -F "module_path=<module_path.txt" \
   -F "new_code=<new_code.txt" \

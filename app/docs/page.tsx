@@ -122,6 +122,12 @@ export default function DocsPage() {
           Обработка выполняется на edge, локальный Node/PowerShell и base64 не нужны —
           файл передаётся через <span className="font-mono">curl -F "file=@input.cfe"</span>.
         </p>
+        <p className="mb-3 text-xs text-muted-foreground">
+          Базовый URL:{" "}
+          <span className="font-mono">
+            https://tight-waterfall-6bb.netesn.workers.dev
+          </span>
+        </p>
         <div className="overflow-x-auto rounded-lg border">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/40 font-mono text-xs uppercase text-muted-foreground">
@@ -152,15 +158,17 @@ export default function DocsPage() {
             </tbody>
           </table>
         </div>
-        <pre className="mt-3 overflow-x-auto rounded-lg border bg-muted/30 p-4 font-mono text-xs leading-relaxed">{`# 1. Структура
-curl -s -X POST https://<worker>/api/tree-form -F "file=@input.cfe" -o tree.json
+        <pre className="mt-3 overflow-x-auto rounded-lg border bg-muted/30 p-4 font-mono text-xs leading-relaxed">{`BASE=https://tight-waterfall-6bb.netesn.workers.dev
+
+# 1. Структура
+curl -s -X POST $BASE/api/tree-form -F "file=@input.cfe" -o tree.json
 
 # 2. Чтение модуля (путь кладём в module_path.txt, UTF-8)
-curl -s -X POST https://<worker>/api/read-form \\
+curl -s -X POST $BASE/api/read-form \\
   -F "file=@input.cfe" -F "module_path=<module_path.txt" -o module.json
 
 # 3. Правка и получение результата
-curl -s -X POST https://<worker>/api/edit-form \\
+curl -s -X POST $BASE/api/edit-form \\
   -F "file=@input.cfe" -F "module_path=<module_path.txt" -F "new_code=<new_code.txt" \\
   -o output.cfe`}</pre>
         <p className="mt-2 text-xs text-muted-foreground">
