@@ -114,6 +114,61 @@ export default function DocsPage() {
       </section>
 
       <section className="mb-8">
+        <h2 className="mb-3 font-mono text-lg font-semibold">
+          Серверный API (Cloudflare Worker)
+        </h2>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Альтернатива без браузера: запросы по HTTP напрямую к Cloudflare Worker.
+          Обработка выполняется на edge, локальный Node/PowerShell и base64 не нужны —
+          файл передаётся через <span className="font-mono">curl -F "file=@input.cfe"</span>.
+        </p>
+        <div className="overflow-x-auto rounded-lg border">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-muted/40 font-mono text-xs uppercase text-muted-foreground">
+              <tr>
+                <th className="px-4 py-2">Эндпоинт</th>
+                <th className="px-4 py-2">Формат</th>
+                <th className="px-4 py-2">Назначение</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ["POST /api/tree", "JSON", "Список файлов"],
+                ["POST /api/read", "JSON", "Прочитать текст модуля"],
+                ["POST /api/edit", "JSON", "Изменить модуль (возвращает file_base64)"],
+                ["POST /api/edit-all", "JSON", "Добавить комментарий во все .bsl"],
+                ["POST /api/tree-form", "multipart", "Список файлов (файл напрямую)"],
+                ["POST /api/read-form", "multipart", "Прочитать текст модуля"],
+                ["POST /api/edit-form", "multipart", "Изменить модуль → готовый .cfe"],
+              ].map(([ep, fmt, desc]) => (
+                <tr key={ep} className="border-t">
+                  <td className="whitespace-nowrap px-4 py-2 font-mono text-xs">
+                    {ep}
+                  </td>
+                  <td className="px-4 py-2 font-mono text-xs text-primary">{fmt}</td>
+                  <td className="px-4 py-2 text-xs text-muted-foreground">{desc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <pre className="mt-3 overflow-x-auto rounded-lg border bg-muted/30 p-4 font-mono text-xs leading-relaxed">{`# 1. Структура
+curl -s -X POST https://<worker>/api/tree-form -F "file=@input.cfe" -o tree.json
+
+# 2. Чтение модуля (путь кладём в module_path.txt, UTF-8)
+curl -s -X POST https://<worker>/api/read-form \\
+  -F "file=@input.cfe" -F "module_path=<module_path.txt" -o module.json
+
+# 3. Правка и получение результата
+curl -s -X POST https://<worker>/api/edit-form \\
+  -F "file=@input.cfe" -F "module_path=<module_path.txt" -F "new_code=<new_code.txt" \\
+  -o output.cfe`}</pre>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Документация — файл <span className="font-mono">worker-api/README.md</span>.
+        </p>
+      </section>
+
+      <section className="mb-8">
         <h2 className="mb-3 font-mono text-lg font-semibold">Рабочий цикл агента</h2>
         <ol className="list-inside list-decimal space-y-1 text-sm text-muted-foreground">
           <li>Открой сайт (http://s96346ix.beget.tech/) и дождись window.__oneCEditor__.</li>
